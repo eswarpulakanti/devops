@@ -1,11 +1,10 @@
-node {
-  stage('SCM') {
-    git 'https://github.com/eswarpulakanti/devops.git'
-  }
-  stage('SonarQube analysis') {
-    def scannerHome = tool 'SonarScanner 4.7';
-    withSonarQubeEnv('My SonarQube Server') { // If you have configured more than one global server connection, you can specify its name
-      sh "${scannerHome}/bin/sonar-scanner"
-    }
-  }
+stage ('Scan and Build Jar File') {
+            steps {
+               withSonarQubeEnv(installationName: 'Production SonarQubeScanner', credentialsId: 'SonarQubeToken') {
+                sh 'mvn clean package sonar:sonar'
+                }
+            }
+            withSonarQubeEnv('My SonarQube Server', envOnly: true) {
+  // This expands the evironment variables sonarfile, http://127.0.0.1:9000/, sqa_e33d87950196351028342b65856e16a934c532d3  can be used by any script.
+  println ${env.http://127.0.0.1:9000} 
 }
